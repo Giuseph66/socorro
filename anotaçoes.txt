@@ -1,3 +1,0 @@
-inicia = django-admin startproject meu_site  
-inicia_site= py manage.py runserver          
-app= py manage.py startapp poll
