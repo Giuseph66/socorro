@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socorro-login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login_cadas.css' %}">
+    <link rel="icon" href="{% static 'imgs/sos .png' %}" type="image/x-icon">
+</head>
+
+<body>
+  <div class="center-container">
+    <div class="welcome-message">
+      <h2>Bem-vindo... talvez possamos te ajudar</h2>
+  </div>
+            <div class="frame">
+                <div class="center-text">
+                    <h1>Tela login</h1>
+                    <form action="{% url 'socorro_app:main' %}" method="post">
+                        {% csrf_token %}
+                        <label for="username">E-mail Cadastrado:</label>
+                        <input type="text" id="username" name="email" required>
+                        <label for="password">Senha:</label>
+                        <input type="password" id="password" name="senha" required>
+                        <button class="staio_button" type="submit">Entrar</button>
+                    </form>
+                    <form action="{% url 'socorro_app:cads' %}" method="post">
+                        {% csrf_token %}
+                        <button class="staio_button" type="submit">Cadastrar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% if validacao > 0 %}
+    <div id="welcomeModal" class="modal" style="display:block;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>{{ sms }}</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <script src="{% static 'scripts/login_cads.js' %}"></script>
+</body>
+</html>
