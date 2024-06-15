@@ -1,15 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Socorrooooo</title>
+    <title>Socorro-157</title>
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="icon" href="{% static 'imgs/sos .png' %}" type="image/x-icon">
 </head>
 <body>
-    <div class="hb01">
-        <h1>Alguma coisa</h1>
+    <div class="container">
+        <div class="header">
+            <div class="project-idea">
+                <h1>Socorro - Plataforma de Aprendizado Interativo</h1>
+                <p>Uma solução inovadora para ensino e aprendizado colaborativo.</p>
+            </div>
+            <div class="user-profile">
+                <p>Bem-vindo, [Nome do Usuário]</p>
+                <a href="#">Perfil</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <section class="how-it-works">
+                <h2>Como Funciona</h2>
+                <ul>
+                    <li>Explore as diferentes matérias disponíveis.</li>
+                    <li>Escolha a matéria desejada e visualize as respostas disponíveis.</li>
+                    <li>Contribua com suas próprias respostas para ajudar outros alunos.</li>
+                    <li>Interaja de forma colaborativa e ganhe reconhecimento.</li>
+                </ul>
+            </section>
+
+            <div class="search-filter">
+                <label for="comboCursos">Filtrar por curso:</label>
+                <select id="comboCursos">
+                    <option value="engenharia">Engenharia</option>
+                    <option value="medicina">Medicina</option>
+                    <option value="direito">Direito</option>
+                    <option value="administracao">Administração</option>
+                </select>
+
+                <label for="comboMaterias">Filtrar por matéria:</label>
+                <select id="comboMaterias">
+                    <option value="matematica">Matemática</option>
+                    <option value="portugues">Português</option>
+                    <option value="historia">História</option>
+                    <option value="geografia">Geografia</option>
+                    <option value="ciencias">Ciências</option>
+                </select>
+            </div>
+
+            <div class="image-list">
+                <div class="image-item">
+                    <img src="image1.jpg" alt="Imagem 1">
+                    <div class="image-details">
+                        <p>Descrição da imagem 1</p>
+                        <p>Valor: R$ 10,00</p>
+                    </div>
+                    <a href="#">Visualizar</a>
+                </div>
+                <div class="image-item">
+                    <img src="image2.jpg" alt="Imagem 2">
+                    <div class="image-details">
+                        <p>Descrição da imagem 2</p>
+                        <p>Valor: R$ 20,00</p>
+                    </div>
+                    <a href="#">Visualizar</a>
+                </div>
+                <div class="image-item">
+                    <img src="image3.jpg" alt="Imagem 3">
+                    <div class="image-details">
+                        <p>Descrição da imagem 3</p>
+                        <p>Valor: R$ 15,00</p>
+                    </div>
+                    <a href="#">Visualizar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 Socorro - Plataforma de Aprendizado Interativo. Todos os direitos reservados.</p>
+        </div>
     </div>
 </body>
 </html>
+
