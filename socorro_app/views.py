@@ -24,8 +24,9 @@ def man(request):
     if request.method == 'POST':
         gmail = request.POST.get('email')
         senha = request.POST.get('senha')
-        usuario = Usuario.objects.first()
+        usuario = Usuario.objects.filter(gmail=gmail)
+        print(usuario)
         if Usuario.objects.filter(gmail=gmail,senha=senha).exists():
-            return render(request, 'socorro_app/test.html',{'usuario': usuario})
+            return render(request, 'socorro_app/inicio.html',{"usu":usuario})
         else:
             return render(request,'socorro_app/login.html',{"validacao":1,"sms":"Senha incorreta ou usuário não cadastrado!"})

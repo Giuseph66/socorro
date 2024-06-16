@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socorro-157</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/princ.css' %}">
+    <link rel="icon" href="{% static 'imgs/sos .png' %}" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="project-idea">
+                <h1>Socorro - Plataforma para negociação de trabalhos</h1>
+                <p>Uma solução inovadora para ensino e aprendizado .</p>
+            </div>
+            <div class="user-profile">
+                {% for usuario in usu %}
+                <p>Bem-vindo, {{ usuario.nome }}</p>
+            {% endfor %}
+            </div>
+        </div>
+
+        <div class="content">
+            <section class="how-it-works">
+                <h2>Como Funciona</h2>
+                <ul>
+                    <li>Você pode pagar para alguem fazer seu trebalho.</li>
+                    <li>Você pode receber para fazer trabalhos de outras pessoas.</li>
+                    <li>Tudo muito simples...</li>
+                    <li>Sem contar que nao é necessario expor seu nome.</li>
+                </ul>
+            </section>
+
+            <div class="search-filter">
+                <label for="comboCursos">Filtrar por curso:</label>
+                <select id="comboCursos">
+                    <option value="engenharia">Engenharia</option>
+                    <option value="medicina">Medicina</option>
+                    <option value="direito">Direito</option>
+                    <option value="administracao">Administração</option>
+                </select>
+
+                <label for="comboMaterias">Filtrar por matéria:</label>
+                <select id="comboMaterias">
+                    <option value="matematica">Matemática</option>
+                    <option value="portugues">Português</option>
+                    <option value="historia">História</option>
+                    <option value="geografia">Geografia</option>
+                    <option value="ciencias">Ciências</option>
+                </select>
+            </div>
+
+            <div class="image-list">
+                <div class="image-item">
+                    <img src="image1.jpg" alt="Imagem 1">
+                    <div class="image-details">
+                        <p>Descrição da imagem 1</p>
+                        <p>Valor: R$ 10,00</p>
+                    </div>
+                    <a href="#">Visualizar</a>
+                </div>
+                <div class="image-item">
+                    <img src="image2.jpg" alt="Imagem 2">
+                    <div class="image-details">
+                        <p>Descrição da imagem 2</p>
+                        <p>Valor: R$ 20,00</p>
+                    </div>
+                    <a href="#">Visualizar</a>
+                </div>
+                <div class="image-item">
+                    <img src="image3.jpg" alt="Imagem 3">
+                    <div class="image-details">
+                        <p>Descrição da imagem 3</p>
+                        <p>Valor: R$ 15,00</p>
+                    </div>
+                    <a href="#">Visualizar</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2024 Socorro - Plataforma de Aprendizado Interativo. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</body>
+</html>
+
