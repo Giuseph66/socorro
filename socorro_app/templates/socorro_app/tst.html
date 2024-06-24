@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socorro-Novo</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style_3.css' %}">
+    <link rel="icon" href="{% static 'imgs/sos .png' %}" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="project-idea">
+                <h1>Socorro - Area de inserção de trabalhos</h1>
+            </div>
+            <div class="user-profile">
+                <p>Vamos lá {{ usu.nome }}</p>
+            </div>
+        </div>
+
+        <div class="content">
+            <section class="how-it-works">
+                <h2>Como Funciona:</h2>
+                <ul>
+                    <li>Você deve selecionar primeiramente o curso e a area do seu trabalho.</li>
+                    <li>caso nao tenha no sistema, voce pode adiciona-lá.</li>
+                    <li>Logo após voce pode inserir o trabalho no formato que estiver...(pdf,png...)</li>
+                    <li>A estimativa de valores ficará a carater do avaliador.</li>
+                    <li>Caso queira uma aula sobre o assunto, selecione os cards...(Valor adicional)</li>
+                </ul>
+            </section>
+            </div>
+            
+            <form action="" method="post">
+            <div class="search-filter">
+                <label for="comboCursos">Curso:</label>
+                <select id="comboCursos" onchange="enviarCursoSelecionado()">
+                    {% for cur in curso %}
+                    <option value="{{ cur.id }}">{{ cur.cursos }}</option>
+                    {% endfor %}
+                </select>
+                <form action="{% url 'socorro_app:novo' id_usu=usu.id_usuario valida=1 %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">+</button>
+                </form>
+
+                <label for="comboMaterias">Matéria:</label>
+                <select id="comboMaterias">
+                    {% for mate in materias %}
+                    <option value="{{ mate.id }}">{{ mate.materias }}</option>
+                    {% endfor %}
+                </select>
+                <form action="{% url 'socorro_app:novo' id_usu=usu.id_usuario valida=2 %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">+</button>
+                </form>
+            </div>
+                {% csrf_token %}
+                <label for="Titulo">Titulo:</label>
+                <input type="text" id="Titulo" name="titu" required>
+                <label for="valor">Valor a pagar(max):</label>
+                <input type="valor" id="valor" name="valor" required>   
+                <form action="{% url 'socorro_app:upload_trabalho' %}" method="post">
+                    {% csrf_token %}
+                    <input type="file" id="Arquivos" name="arquivos" multiple required>         
+                    <button class="staio_button" type="submit">+</button>
+                </form>
+                <button class="staio_button" type="submit">Enviar</button>
+            </form>
+        </div>
+        
+    </div>
+    
+    {% if validacao == 1 %}
+    <div id="welcomeModal" class="modal" style="display:block;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form action="{% url 'socorro_app:novo_curso' id_usu=usu.id_usuario valida=9 %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="curso_v">Curso:</label>
+                    <input type="text" id="curso_v" name="curso" required>
+                </div>
+                <button type="submit">Adicionar</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    {% if validacao == 2 %}
+    <div id="welcomeModal" class="modal" style="display:block;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form action="{% url 'socorro_app:novo_materia' id_usu=usu.id_usuario valida=9 %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="comboCursos">Curso:</label>
+                    <select id="comboCursos" name="curso">
+                        {% for cur in curso %}
+                        <option value="{{ cur.id }}">{{ cur.cursos }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="Materia">Matéria:</label>
+                    <input type="text" id="Materia" name="mate" required>
+                </div>
+                <button type="submit">Adicionar</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+    
+    <script src="{% static 'scripts/login_cads.js' %}"></script>
+    
+    <script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function enviarCursoSelecionado() {
+        var comboCursos = document.getElementById('comboCursos');
+        var cursoSelecionado = comboCursos.value;
+        var url = "{% url 'socorro_app:processar_curso' id_usu=usu.id_usuario valida=0 %}";
+        var csrftoken = getCookie('csrftoken');
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+
+        var formData = new FormData();
+        formData.append('curso_id', cursoSelecionado);
+
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                var response = xhr.responseText;
+                console.log(response);
+                document.open();
+                document.write(response);
+                document.close();
+            } else {
+                console.error('Erro na resposta do servidor:', xhr.responseText);
+            }
+        };
+
+        xhr.onerror = function () {
+            console.error('Erro na requisição AJAX.');
+        };
+
+        xhr.send(formData);
+    }</script>
+</body>
+</html>
+

@@ -7,7 +7,7 @@ body {
     justify-content: center;
     align-items: flex-start;
     min-height: 100vh;
-    background-image: url('/static/imgs/fundo_2.webp');
+    background-image: url('/static/imgs/fundo_3.webp');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -20,7 +20,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     padding: 20px;
-    display: flex;
+    display: center;
     flex-direction: column;
     align-items: center;
     color: #ecf0f1;
@@ -112,10 +112,9 @@ body {
     top: 0;
     animation: bounce 2s infinite alternate;
 }
-
 .search-filter {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-bottom: 20px;
     width: 100%;
@@ -123,7 +122,8 @@ body {
 }
 
 .search-filter label {
-    margin-right: 10px;
+    margin-right: 20px;
+    margin-left: 20px;
 }
 
 .search-filter select {
@@ -142,71 +142,112 @@ body {
     transform: scale(1.05);
 }
 
-.image-list {
-    width: 100%;
-    margin-bottom: 20px;
+.search-filter form {
+    margin-left: left;
 }
 
-.image-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: rgba(52, 73, 94, 0.9);
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    margin: 10px 0;
-    padding: 20px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: fadeInUp 1s ease;
-}
-
-.image-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-}
-
-.image-item img {
-    max-width: 150px;
-    border-radius: 8px;
-    margin-right: 20px;
-}
-
-.image-details {
-    flex: 1;
-}
-
-.image-details p {
-    margin: 10px 0;
-    color: #ecf0f1;
-}
-
-.image-item a {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #27ae60;
-    color: #fff;
-    text-decoration: none;
+.search-filter button {
+    padding: 10px;
+    font-size: 1rem;
     border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #0e2b49;
+    color: #ecf0f1;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.image-item a:hover {
-    background-color: #2ecc71;
-    transform: translateY(-3px);
+.search-filter button:hover {
+    background-color: #3e5c76;
+    transform: scale(1.05);
+}
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.4); 
 }
 
-.footer {
+.modal-content {
+    background-color: #9fc6ee;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+    max-width: 500px; 
+    border-radius: 1em;
+    text-align: left;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-content .form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.modal-content label {
+    color: #1e1e1e;
+}
+
+.modal-content select,
+.modal-content input {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
     background-color: #34495e;
     color: #ecf0f1;
-    text-align: center;
-    padding: 10px;
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-    margin-top: 20px;
-    width: 100%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-/* Animações */
+.modal-content button {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #0e2b49;
+    color: #ecf0f1;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.modal-content select:hover,
+.modal-content input:hover,
+.modal-content button:hover {
+    background-color: #3e5c76;
+    transform: scale(1.05);
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;

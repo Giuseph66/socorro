@@ -5,20 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socorro-157</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/princ.css' %}">
-    <link rel="icon" href="{% static 'imgs/sos .png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/style_2.css' %}">
+    <link rel="icon" href="{% static 'imgs/sos.png' %}" type="image/x-icon">
 </head>
 <body>
     <div class="container">
         <div class="header">
             <div class="project-idea">
                 <h1>Socorro - Plataforma para negociação de trabalhos</h1>
-                <p>Uma solução inovadora para ensino e aprendizado .</p>
+                <p>Uma solução inovadora para ensino e aprendizado.</p>
             </div>
             <div class="user-profile">
-                {% for usuario in usu %}
-                <p>Bem-vindo, {{ usuario.nome }}</p>
-            {% endfor %}
+                <p>Bem-vindo, {{ usu.0.nome }}</p>
             </div>
         </div>
 
@@ -26,32 +24,35 @@
             <section class="how-it-works">
                 <h2>Como Funciona</h2>
                 <ul>
-                    <li>Você pode pagar para alguem fazer seu trebalho.</li>
+                    <li>Você pode pagar para alguém fazer seu trabalho.</li>
                     <li>Você pode receber para fazer trabalhos de outras pessoas.</li>
                     <li>Tudo muito simples...</li>
-                    <li>Sem contar que nao é necessario expor seu nome.</li>
+                    <li>Sem contar que não é necessário expor seu nome.</li>
                 </ul>
             </section>
 
             <div class="search-filter">
-                <label for="comboCursos">Filtrar por curso:</label>
-                <select id="comboCursos">
-                    <option value="engenharia">Engenharia</option>
-                    <option value="medicina">Medicina</option>
-                    <option value="direito">Direito</option>
-                    <option value="administracao">Administração</option>
+                <label for="comboCursos">Curso:</label>
+                <select id="comboCursos" onchange="enviarCursoSelecionado()">
+                    {% for cur in curso %}
+                    <option value="{{ cur.id }}">{{ cur.cursos }}</option>
+                    {% endfor %}
                 </select>
-
-                <label for="comboMaterias">Filtrar por matéria:</label>
+                
+                <label for="comboMaterias">Matéria:</label>
                 <select id="comboMaterias">
-                    <option value="matematica">Matemática</option>
-                    <option value="portugues">Português</option>
-                    <option value="historia">História</option>
-                    <option value="geografia">Geografia</option>
-                    <option value="ciencias">Ciências</option>
+                    {% for mate in materias %}
+                    <option value="{{ mate.id }}">{{ mate.materias }}</option>
+                    {% endfor %}
                 </select>
+                {% for usuario in usu %}
+                <form action="{% url 'socorro_app:novo' id_usu=usuario.id_usuario valida=0 %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Adicionar novo trabalho</button>
+                </form>
+                {% endfor %}
             </div>
-
+            
             <div class="image-list">
                 <div class="image-item">
                     <img src="image1.jpg" alt="Imagem 1">
@@ -79,11 +80,59 @@
                 </div>
             </div>
         </div>
-
+        
         <div class="footer">
             <p>&copy; 2024 Socorro - Plataforma de Aprendizado Interativo. Todos os direitos reservados.</p>
         </div>
     </div>
+    
+<script>
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function enviarCursoSelecionado() {
+        var comboCursos = document.getElementById('comboCursos');
+        var cursoSelecionado = comboCursos.value;
+        var url = "{% url 'socorro_app:processar_curso_ini' id_usu=usu.0.id_usuario valida=0 %}";
+        var csrftoken = getCookie('csrftoken');
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', url, true);
+        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+
+        var formData = new FormData();
+        formData.append('curso_id', cursoSelecionado);
+
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                var response = xhr.responseText;
+                console.log(response);
+                document.open();
+                document.write(response);
+                document.close();
+            } else {
+                console.error('Erro na resposta do servidor:', xhr.responseText);
+            }
+        };
+
+        xhr.onerror = function () {
+            console.error('Erro na requisição AJAX.');
+        };
+
+        xhr.send(formData);
+    }
+</script>
 </body>
 </html>
-
