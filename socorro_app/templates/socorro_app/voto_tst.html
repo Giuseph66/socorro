@@ -1,0 +1,7 @@
+
+<h2>Avaliar {{ trabalho.trabalho }}</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Enviar Avaliação</button>
+</form>

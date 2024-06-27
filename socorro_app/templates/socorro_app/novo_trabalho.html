@@ -6,16 +6,20 @@
     <title>Socorro-Novo</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style_3.css' %}">
-    <link rel="icon" href="{% static 'imgs/sos.png' %}" type="image/x-icon">
+    <link rel="icon" href="{% static 'imgs/sos .png' %}" type="image/x-icon">
 </head>
 <body>
     <div class="container">
         <div class="header">
             <div class="project-idea">
                 <h1>Socorro - Área de inserção de trabalhos</h1>
+                <form action="{% url 'socorro_app:inicio' id_usu=usu.id_usuario %}">
+                    <button type="submit">Inicio</button>
+                </form>
             </div>
             <div class="user-profile">
                 <p>Vamos lá {{ usu.nome }}</p>
+                <a href="{% url 'socorro_app:perfil' id_usu=usu.id_usuario %}" style="color: white;">➔</a>
             </div>
         </div>
 
@@ -32,7 +36,7 @@
             </section>
         </div>
         
-        <form action="{% url 'socorro_app:upload_trabalho' id_usu=usu.id_usuario %}" method="post" enctype="multipart/form-data">
+        <form action="{% url 'socorro_app:upload_trabalho' id_usu=usu.id_usuario %}" method="post" enctype="multipart/form-data" class="form-upload-trabalho">
             {% csrf_token %}
             <div class="search-filter">
                 <label for="comboCursos">Curso:</label>
@@ -42,7 +46,7 @@
                     {% endfor %}
                 </select>
                 <button type="button" onclick="abrirModalCurso()">+</button>
-
+        
                 <label for="comboMaterias">Matéria:</label>
                 <select id="comboMaterias" name="Materia_traba">
                     {% for mate in materias %}
@@ -51,17 +55,30 @@
                 </select>
                 <button type="button" onclick="abrirModalMateria()">+</button>
             </div>
-
-            <label for="Titulo">Título:</label>
-            <input type="text" id="Titulo" name="trabalho" required>
-            <label for="valor">Valor a pagar (máx):</label>
-            <input type="number" id="valor" name="valor_afazer" required>
-            <label for="data">Data:</label>
-            <input type="date" id="data" name="data" required>
-            <label for="Arquivos">Arquivos do trabalho:</label>
-            <input type="file" id="Arquivos" name="arquivos" multiple required>
-            <button type="submit">Enviar</button>
+        
+            <div class="form-group">
+                <label for="Titulo">Título:</label>
+                <input type="text" id="Titulo" name="trabalho" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="valor">Valor a pagar (máx):</label>
+                <input type="number" id="valor" name="valor_afazer" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="data">Data:</label>
+                <input type="date" id="data" name="data" required>
+            </div>
+        
+            <div class="form-group">
+                <label for="Arquivos">Arquivos do trabalho:</label>
+                <input type="file" id="Arquivos" name="arquivos" required>
+            </div>
+            
+            <button type="submit" class="submit-button">Enviar</button>
         </form>
+        
     </div>
 
     <div id="modalCurso" class="modal">

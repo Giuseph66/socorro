@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socorro - Perfil do Usuário</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style_4 .css' %}">
+    <link rel="icon" href="{% static 'imgs/sos .png' %}" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Perfil do Usuário</h1>
+            <form action="{% url 'socorro_app:inicio' id_usu=usu.id_usuario %}">
+                <button type="submit">Inicio</button>
+            </form>
+        </div>
+        <div class="profile-section">
+            <div>
+                <h2>Dados Pessoais</h2>
+                <ul class="profile-details">
+                    <li>Nome: {{ usu.nome }}</li>
+                    <li>Email: {{ usu.gmail }}</li>
+                    <li>Telefone: {{ usu.cell }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="balance">
+            <h3>Saldo</h3>
+            <p>R$ {{ usu.saldo }}</p>
+        </div>
+
+        <div class="profile-section">
+            <h2>Estatísticas</h2>
+            <ul class="stats">
+                <li class="stat-item">
+                    <h3>0</h3>
+                    <p>Trabalhos Feitos</p>
+                </li>
+                <li class="stat-item">
+                    <h3>5</h3>
+                    <p>Avaliação Média</p>
+                </li>
+            </ul>
+        </div>
+
+        <div class="profile-section">
+            <h2>Trabalhos Aceitos</h2>
+            <div class="jobs">           
+                {% for trabalho in trabalhos %}
+                <div class="job-block">
+                    <h2>{{ trabalho.trabalho }}</h2>
+                    <p>Curso: {{ trabalho.curso_trab.cursos }}</p>
+                    <p>Matéria: {{ trabalho.fazer_materia.materias }}</p>
+                    <p>Data de Entrega: {{ trabalho.data }}</p>
+                    <p>Valor disposto a pagar: R$ {{ trabalho.valor_afazer }}</p>
+                    {% for arquivo in trabalho.arquivos.all %}
+                    <a href="{{ arquivo.arquivo.url }}" target="_blank">Visualizar Arquivo</a>
+                    {% endfor %}
+                    <form action="{% url 'socorro_app:entrega' id_usu=usu.id_usuario trabalho=trabalho.id %}" method="get">
+                        <button >Entregar Trabalho</button>
+                    </form>
+                </div>
+                {% empty %}
+                <p>Nenhum trabalho aceito.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <h2>Trabalhos Feitos</h2>
+            <div class="jobs">
+                {% for trabalho in feitos %}
+                <div class="job-block">
+                    <h2>{{ trabalho.trabalho }}</h2>
+                    <p>Curso: {{ trabalho.curso_trab.cursos }}</p>
+                    <p>Matéria: {{ trabalho.fazer_materia.materias }}</p>
+                    <p>Data de Entrega: {{ trabalho.data }}</p>
+                    <p>Valor a ser pago: R$ {{ trabalho.pago }}</p>
+                    {% for arquivo in trabalho.arquivos.all %}
+                    <a href="{{ arquivo.arquivo.url }}" target="_blank">Visualizar Arquivo</a>
+                    {% endfor %}
+                    <a href="{{ trabalho.trabalho_cm_pronto.url }}" target="_blank" style="color: rgb(57, 169, 57);">Visualizar Pronto</a>
+                </div>
+                {% empty %}
+                <p>Nenhum trabalho feito.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% if validacao > 0 %}
+    <div id="welcomeModal" class="modal" style="display:block;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <form action="{% url 'socorro_app:upload_trabalho_pronto' id_usu=usu.id_usuario trabalho=validacao %}" method="post" enctype="multipart/form-data" class="form-upload-trabalho">
+                {% csrf_token %}
+            <label for="Arquivos">Arquivos do trabalho:</label>
+            <input type="file" id="Arquivos" name="arquivos" required>
+            
+            <label for="valor">Valor :</label>
+            <input type="number" id="valor" name="valor_novo" value="{{ valor }}" required>
+            
+            <button type="submit" class="submit-button">Entregar</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    <script src="{% static 'scripts/login_cads.js' %}"></script>
+    
+    <script>
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        </script>
+</body>
+</html>

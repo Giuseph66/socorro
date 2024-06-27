@@ -45,7 +45,16 @@ body {
     flex: 1;
     animation: fadeInDown 1s ease;
 }
-
+.header button{
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    display: center;
+    border: 1px solid #ccc;
+    background-color: #0e2b49;
+    color: #ecf0f1;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
 .header .user-profile {
     flex: 1;
     text-align: right;
@@ -59,7 +68,7 @@ body {
     animation: glow 2s infinite alternate;
 }
 
-.header p {
+.header p a {
     margin: 5px 0 0;
     color: #bdc3c7;
 }
@@ -78,7 +87,9 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     animation: fadeInUp 1s ease;
 }
-
+.project-idea a {
+    color: white;
+}
 .how-it-works h2 {
     font-size: 1.8rem;
     text-transform: uppercase;
@@ -246,6 +257,87 @@ body {
 .modal-content button:hover {
     background-color: #3e5c76;
     transform: scale(1.05);
+}
+.form-upload-trabalho {
+    background-color: rgba(52, 152, 219, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    color: #ecf0f1;
+    margin-bottom: 20px;
+    animation: fadeInUp 1s ease;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-upload-trabalho .form-group {
+    margin-bottom: 15px;
+}
+
+.form-upload-trabalho label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #ecf0f1;
+}
+
+.form-upload-trabalho input[type="text"],
+.form-upload-trabalho input[type="number"],
+.form-upload-trabalho input[type="date"],
+.form-upload-trabalho input[type="file"],
+.form-upload-trabalho select {
+    width: 98%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #34495e;
+    color: #ecf0f1;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.form-upload-trabalho input[type="text"]:hover,
+.form-upload-trabalho input[type="number"]:hover,
+.form-upload-trabalho input[type="date"]:hover,
+.form-upload-trabalho input[type="file"]:hover,
+.form-upload-trabalho select:hover {
+    background-color: #3e5c76;
+    transform: scale(1.05);
+}
+
+.form-upload-trabalho .submit-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #0e2b49;
+    color: #ecf0f1;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.form-upload-trabalho .submit-button:hover {
+    background-color: #3e5c76;
+    transform: scale(1.05);
+}
+
+.search-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.search-filter label {
+    margin-right: 10px;
+}
+
+.search-filter select {
+    flex-grow: 1;
+    margin-right: 10px;
 }
 
 @keyframes fadeInUp {

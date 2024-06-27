@@ -1,164 +1,142 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Socorro-Novo</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style_3.css' %}">
-    <link rel="icon" href="{% static 'imgs/sos .png' %}" type="image/x-icon">
+    <title>Adicionar Produtos e Receitas de Bolo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-section {
+            margin-top: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #5cb85c;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #4cae4c;
+        }
+
+        button[type="button"] {
+            display: block;
+            width: auto;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button[type="button"]:hover {
+            background-color: #0056b3;
+        }
+
+        #ingredients-container textarea {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="project-idea">
-                <h1>Socorro - Area de inserção de trabalhos</h1>
-            </div>
-            <div class="user-profile">
-                <p>Vamos lá {{ usu.nome }}</p>
-            </div>
-        </div>
-
-        <div class="content">
-            <section class="how-it-works">
-                <h2>Como Funciona:</h2>
-                <ul>
-                    <li>Você deve selecionar primeiramente o curso e a area do seu trabalho.</li>
-                    <li>caso nao tenha no sistema, voce pode adiciona-lá.</li>
-                    <li>Logo após voce pode inserir o trabalho no formato que estiver...(pdf,png...)</li>
-                    <li>A estimativa de valores ficará a carater do avaliador.</li>
-                    <li>Caso queira uma aula sobre o assunto, selecione os cards...(Valor adicional)</li>
-                </ul>
-            </section>
-            </div>
-            
-            <form action="" method="post">
-            <div class="search-filter">
-                <label for="comboCursos">Curso:</label>
-                <select id="comboCursos" onchange="enviarCursoSelecionado()">
-                    {% for cur in curso %}
-                    <option value="{{ cur.id }}">{{ cur.cursos }}</option>
-                    {% endfor %}
-                </select>
-                <form action="{% url 'socorro_app:novo' id_usu=usu.id_usuario valida=1 %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">+</button>
-                </form>
-
-                <label for="comboMaterias">Matéria:</label>
-                <select id="comboMaterias">
-                    {% for mate in materias %}
-                    <option value="{{ mate.id }}">{{ mate.materias }}</option>
-                    {% endfor %}
-                </select>
-                <form action="{% url 'socorro_app:novo' id_usu=usu.id_usuario valida=2 %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">+</button>
-                </form>
-            </div>
-                {% csrf_token %}
-                <label for="Titulo">Titulo:</label>
-                <input type="text" id="Titulo" name="titu" required>
-                <label for="valor">Valor a pagar(max):</label>
-                <input type="valor" id="valor" name="valor" required>   
-                <form action="{% url 'socorro_app:upload_trabalho' %}" method="post">
-                    {% csrf_token %}
-                    <input type="file" id="Arquivos" name="arquivos" multiple required>         
-                    <button class="staio_button" type="submit">+</button>
-                </form>
-                <button class="staio_button" type="submit">Enviar</button>
-            </form>
-        </div>
+        <h1>Adicionar Produtos e Receitas de Bolo</h1>
         
-    </div>
-    
-    {% if validacao == 1 %}
-    <div id="welcomeModal" class="modal" style="display:block;">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <form action="{% url 'socorro_app:novo_curso' id_usu=usu.id_usuario valida=9 %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="curso_v">Curso:</label>
-                    <input type="text" id="curso_v" name="curso" required>
+        <div class="form-section">
+            <h2>Adicionar Produto</h2>
+            <form id="product-form">
+                <label for="product-name">Nome do Produto:</label>
+                <input type="text" id="product-name" name="product-name" required>
+
+                <label for="product-price">Preço:</label>
+                <input type="number" id="product-price" name="product-price" step="0.01" required>
+
+                <label for="product-description">Descrição:</label>
+                <textarea id="product-description" name="product-description" required></textarea>
+
+                <button type="submit">Adicionar Produto</button>
+            </form>
+        </div>
+
+        <div class="form-section">
+            <h2>Adicionar Receita</h2>
+            <form id="recipe-form">
+                <label for="recipe-name">Nome da Receita:</label>
+                <input type="text" id="recipe-name" name="recipe-name" required>
+
+                <div id="ingredients-container">
+                    <label>Ingredientes:</label>
+                    <textarea name="recipe-ingredients[]" required></textarea>
                 </div>
-                <button type="submit">Adicionar</button>
+                <button type="button" id="add-ingredient">Adicionar Ingrediente</button>
+
+                <label for="recipe-instructions">Instruções:</label>
+                <textarea id="recipe-instructions" name="recipe-instructions" required></textarea>
+
+                <button type="submit">Adicionar Receita</button>
             </form>
         </div>
     </div>
-    {% endif %}
-    {% if validacao == 2 %}
-    <div id="welcomeModal" class="modal" style="display:block;">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <form action="{% url 'socorro_app:novo_materia' id_usu=usu.id_usuario valida=9 %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="comboCursos">Curso:</label>
-                    <select id="comboCursos" name="curso">
-                        {% for cur in curso %}
-                        <option value="{{ cur.id }}">{{ cur.cursos }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="Materia">Matéria:</label>
-                    <input type="text" id="Materia" name="mate" required>
-                </div>
-                <button type="submit">Adicionar</button>
-            </form>
-        </div>
-    </div>
-    {% endif %}
-    
-    <script src="{% static 'scripts/login_cads.js' %}"></script>
-    
+
     <script>
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    function enviarCursoSelecionado() {
-        var comboCursos = document.getElementById('comboCursos');
-        var cursoSelecionado = comboCursos.value;
-        var url = "{% url 'socorro_app:processar_curso' id_usu=usu.id_usuario valida=0 %}";
-        var csrftoken = getCookie('csrftoken');
+        document.addEventListener('DOMContentLoaded', function() {
+            const addIngredientButton = document.getElementById('add-ingredient');
+            const ingredientsContainer = document.getElementById('ingredients-container');
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', url, true);
-        xhr.setRequestHeader('X-CSRFToken', csrftoken);
-
-        var formData = new FormData();
-        formData.append('curso_id', cursoSelecionado);
-
-        xhr.onload = function () {
-            if (xhr.status >= 200 && xhr.status < 400) {
-                var response = xhr.responseText;
-                console.log(response);
-                document.open();
-                document.write(response);
-                document.close();
-            } else {
-                console.error('Erro na resposta do servidor:', xhr.responseText);
-            }
-        };
-
-        xhr.onerror = function () {
-            console.error('Erro na requisição AJAX.');
-        };
-
-        xhr.send(formData);
-    }</script>
+            addIngredientButton.addEventListener('click', function() {
+                const newIngredient = document.createElement('textarea');
+                newIngredient.name = 'recipe-ingredients[]';
+                newIngredient.required = true;
+                ingredientsContainer.appendChild(newIngredient);
+            });
+        });
+    </script>
 </body>
 </html>
-

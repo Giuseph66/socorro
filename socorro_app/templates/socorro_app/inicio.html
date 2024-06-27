@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Socorro-157</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style_2.css' %}">
-    <link rel="icon" href="{% static 'imgs/sos.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/style_2 .css' %}">
+    <link rel="icon" href="{% static 'imgs/sos .png' %}" type="image/x-icon">
 </head>
 <body>
     <div class="container">
@@ -17,6 +17,7 @@
             </div>
             <div class="user-profile">
                 <p>Bem-vindo, {{ usu.0.nome }}</p>
+                <a href="{% url 'socorro_app:perfil' id_usu=usu.0.id_usuario %}">➔</a>
             </div>
         </div>
 
@@ -45,6 +46,9 @@
                     <option value="{{ mate.id }}">{{ mate.materias }}</option>
                     {% endfor %}
                 </select>
+                <form action="{% url 'socorro_app:inicio' id_usu=usu.0.id_usuario %}">
+                    <button type="submit">Inicio</button>
+                </form>
                 {% for usuario in usu %}
                 <form action="{% url 'socorro_app:novo' id_usu=usuario.id_usuario valida=0 %}" method="post">
                     {% csrf_token %}
@@ -53,36 +57,43 @@
                 {% endfor %}
             </div>
             
+            {% for trabalho in trabalhos %}
             <div class="image-list">
                 <div class="image-item">
-                    <img src="image1.jpg" alt="Imagem 1">
                     <div class="image-details">
-                        <p>Descrição da imagem 1</p>
-                        <p>Valor: R$ 10,00</p>
+                        <h2>{{ trabalho.trabalho }}</h2>
+                        <p>Curso: {{ trabalho.curso_trab.cursos }}</p>
+                        <p>Matéria: {{ trabalho.fazer_materia.materias }}</p>
+                        <p>Data de Entrega: {{ trabalho.data }}</p>
+                        {% if trabalho.trabalho_cm_pronto != "pendente"%}
+                        <p>Valor : R$ {{ trabalho.pago }}</p>
+                        <h3 style="color: green;">Trabalho pronto</h3>
+                        <form action="{% url 'socorro_app:tela_compra' id_usu=usu.0.id_usuario trabalho=trabalho.id %}" method="get">
+                            <button type="submit" style="background-color: red;">Comprar Trabalho</button>
+                        </form>
+                        {% endif %}
+                        {% if trabalho.trabalho_cm_pronto == "pendente"%}
+                        <p>Valor disposto a pagar: R$ {{ trabalho.valor_afazer }}</p>
+                        {% if trabalho.quem_fez > 0 %}
+                        <h3>Alguem ja esta fazendo...</h3>
+                        {% endif %}
+                        {% if trabalho.quem_fez == 0 %}
+                            </div>
+                            <form action="{% url 'socorro_app:aceito' id_usu=usu.0.id_usuario trabalho=trabalho.id %}" method="get">
+                                <button type="submit">Fazer trabalho</button>
+                            </form>
+                            {% endif %}
+                            {% endif %}
+                            {% for arquivo in trabalho.arquivos.all %}
+                            <a href="{{ arquivo.arquivo.url }}" target="_blank">Visualizar</a>
+                            {% endfor %}
                     </div>
-                    <a href="#">Visualizar</a>
                 </div>
-                <div class="image-item">
-                    <img src="image2.jpg" alt="Imagem 2">
-                    <div class="image-details">
-                        <p>Descrição da imagem 2</p>
-                        <p>Valor: R$ 20,00</p>
-                    </div>
-                    <a href="#">Visualizar</a>
-                </div>
-                <div class="image-item">
-                    <img src="image3.jpg" alt="Imagem 3">
-                    <div class="image-details">
-                        <p>Descrição da imagem 3</p>
-                        <p>Valor: R$ 15,00</p>
-                    </div>
-                    <a href="#">Visualizar</a>
-                </div>
-            </div>
+                {% endfor %}
         </div>
         
         <div class="footer">
-            <p>&copy; 2024 Socorro - Plataforma de Aprendizado Interativo. Todos os direitos reservados.</p>
+            <p>&copy; 2024 Socorro - Plataforma para negociação de trabalhos. Todos os direitos reservados.</p>
         </div>
     </div>
     
