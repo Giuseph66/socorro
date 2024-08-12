@@ -105,7 +105,9 @@ def select_ini(request, id_usu, valida):
             cursos.insert(0, pai)
             for materia in materias_cujo:
                 print(materia.materias)
-    return render(request, 'socorro_app/inicio.html', {"usu": usuario,"curso": cursos,"materias": materias_cujo,"validacao": valida})
+    
+    trabalhos = Trabalhos_fazer.objects.filter(curso_trab=curso_id)
+    return render(request, 'socorro_app/inicio.html', {"usu": usuario,"curso": cursos,"materias": materias_cujo,"validacao": valida,'trabalhos': trabalhos})
 
 def select_add(request, id_usu, valida):
     usuario = Usuario.objects.get(id_usuario=id_usu)
@@ -133,8 +135,7 @@ def coletar_arquivo(request, id_usu):
         arquivos = request.FILES.get('arquivos')
         curso = get_object_or_404(Cursos_class, id=curso_id)
         materia = get_object_or_404(Materias_class, id=materia_id)
-        if not Trabalhos_fazer.objects.filter(curso_trab=curso, fazer_materia=materia, trabalho=title).exists() and not TrabalhoArquivo.objects.filter(trabalho__trabalho=title, arquivo__in=arquivos).exists():
-            trabalho = Trabalhos_fazer.objects.create(
+        trabalho = Trabalhos_fazer.objects.create(
                 curso_trab=curso,
                 fazer_materia=materia,
                 trabalho=title,
@@ -145,10 +146,8 @@ def coletar_arquivo(request, id_usu):
                 valor_afazer=valor,
                 pago=0
             )
-            TrabalhoArquivo.objects.create(trabalho=trabalho, arquivo=arquivos)
-            trabalhos = Trabalhos_fazer.objects.all()
-        else:
-            trabalhos=Trabalhos_fazer.objects.filter(curso_trab=curso, fazer_materia=materia,trabalho=title)
+        TrabalhoArquivo.objects.create(trabalho=trabalho, arquivo=arquivos)
+        trabalhos = Trabalhos_fazer.objects.all()
         usuario = Usuario.objects.filter(id_usuario=id_usu)
         cursos= Cursos_class.objects.all()
         materias=Materias_class.objects.all()
@@ -170,8 +169,11 @@ def aceitar_trabalho(request, id_usu,trabalho):
 
     trabalho_ids = [int(id) for id in trabalhos_aceitos_list]
     trabalhos = Trabalhos_fazer.objects.filter(id__in=trabalho_ids)
-
-    return render(request, 'socorro_app/perfil.html',{"usu":usu,"trabalhos":trabalhos})
+    
+    trabalhos_ = [int(id.strip()) for id in usu.Trabalhos_feitos.split(',') if id.strip().isdigit()]
+    trabalho_f = Trabalhos_fazer.objects.filter(id__in=trabalhos_)
+    valor=Trabalhos_fazer.objects.get(id=trabalho)
+    return render(request, 'socorro_app/perfil.html',{"usu":usu,"trabalhos":trabalhos,"feitos":trabalho_f,"valor":valor.valor_afazer})
 
 def recebe_pg(request, id_usu,trabalho):
     usu = Usuario.objects.get(id_usuario=id_usu)
@@ -184,34 +186,31 @@ def recebe_pg(request, id_usu,trabalho):
 
 def coletar_arquivo_pronto(request, id_usu,trabalho):
     if request.method == 'POST':
-        try:
-            valor = request.POST.get('valor_novo')
-            arquivos = request.FILES.get('arquivos')
-            tra_fazer=Trabalhos_fazer.objects.get(id=trabalho)
-            tra_fazer.pago=valor
-            tra_fazer.trabalho_cm_pronto=arquivos
-            tra_fazer.save()
-            usuario = Usuario.objects.get(id_usuario=id_usu)
-            trabalhos_a=usuario.Trabalhos_aceitos.split(',')
-            trabalhos_a.remove(trabalho)
-            usuario.Trabalhos_aceitos=trabalhos_a
-            feitos=usuario.Trabalhos_feitos.split(',')
-            feitos.append(trabalho)
-            usuario.Trabalhos_feitos=feitos
-            usuario.save
-            usuario = Usuario.objects.filter(id_usuario=id_usu)
-            cursos= Cursos_class.objects.all()
-            materias=Materias_class.objects.all()
-            trabalhos = Trabalhos_fazer.objects.all()
-        except:
-            print("Para de recarregar a pagina atoa")
+        valor = request.POST.get('valor_novo')
+        arquivos = request.FILES.get('arquivos')
+        tra_fazer=Trabalhos_fazer.objects.get(id=trabalho)
+        tra_fazer.pago=valor
+        tra_fazer.trabalho_cm_pronto=arquivos
+        tra_fazer.save()
+        usuario = Usuario.objects.get(id_usuario=id_usu)
+        trabalhos_a = usuario.Trabalhos_aceitos.split(',')
+        trabalhos_a.remove(str(trabalho))
+        usuario.Trabalhos_aceitos = ','.join(trabalhos_a)
+        feitos = usuario.Trabalhos_feitos.split(',')
+        feitos.append(str(trabalho)) 
+        usuario.Trabalhos_feitos = ','.join(feitos)
+        usuario.save()
+        usuario = Usuario.objects.filter(id_usuario=id_usu)
+        cursos = Cursos_class.objects.all()
+        materias = Materias_class.objects.all()
+        trabalhos = Trabalhos_fazer.objects.all()
         return render(request, 'socorro_app/inicio.html',{"usu":usuario,"curso":cursos,"materias":materias,'trabalhos': trabalhos})
-    
+
 def tela_compra(request, id_usu,trabalho):
     trabalhos=Trabalhos_fazer.objects.filter(id=trabalho)
     usuario = Usuario.objects.get(id_usuario=id_usu)
     nome="Socorro"
-    chave="5566999086599"
+    chave="+5566999086599"
     valor= "{:.2f}".format(float(trabalhos[0].pago))
     cidade="SINOP_MT"
     txt="LOJA01"

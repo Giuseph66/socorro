@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tela de Compra</title>
+    <title>Socorro-Pagamento</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style_5.css' %}">
     <link rel="icon" href="{% static 'imgs/sos .png' %}" type="image/x-icon">
@@ -14,32 +14,35 @@
     <div class="container">
         <div class="header">
             <h1>Vamos pagar ?</h1>
+            <form action="{% url 'socorro_app:inicio' id_usu=usu.id_usuario %}">
+                <button type="submit">Inicio</button>
+            </form>
         </div>
 
         <div class="product-list">
+            {% for trabalho in trabalhos %}
             <div class="product-item">
                 <div class="product-details">
-                    {% for trabalho in trabalhos %}
                     <h2>{{ trabalho.trabalho }}</h2>
                     <p>Curso: {{ trabalho.curso_trab.cursos }}</p>
                     <p>Matéria: {{ trabalho.fazer_materia.materias }}</p>
                     <p>Data de Entrega: {{ trabalho.data }}</p>
                     <p>Valor disposto a pagar: R$ {{ trabalho.valor_afazer }}</p>
-                    <div class="button-container">
-                        {% for arquivo in trabalho.arquivos.all %}
-                        <a href="{{ arquivo.arquivo.url }}" target="_blank">Trabalho normal</a>
-                        {% endfor %}
-                        <form action="{% url 'socorro_app:entrega' id_usu=usu.id_usuario trabalho=trabalho.id %}"
-                        method="get">
-                        <button>Trabalho Pronto</button>
-                    </form>
+                </div>
+                <div class="image-list">
+                    <img src="{% static 'imgs/qr_code_principal.png' %}" alt="QR Code">
+                </div>
+                <div class="button-container">
+                    {% for arquivo in trabalho.arquivos.all %}
+                    <a href="{{ arquivo.arquivo.url }}" target="_blank">Trabalho normal</a>
+                    {% endfor %}
+                    <a href="{{ trabalho.trabalho_cm_pronto.url }}" style="background-color: #d24444;" target="_blank">Trabalho Pronto</a>
                     {% endfor %}
                 </div>
+                <h3>Copia e cola: {{ copia_cola }}</h3>
             </div>
         </div>
-        <img src="{% static 'imgs/qr_code_principal.png' %}" alt="">
-            <p>Copia e cola : {{ copia_cola }}</p>
-        </div>
+    </div>
 </body>
 
 </html>
